@@ -40,15 +40,10 @@ export const translations = {
         "5-8": "5th–8th",
         "9-10": "9th–10th",
         "11-12": "11th–12th",
-      },
+      } as Record<string, string>,
     },
     achievements: {
       title: "Achievements",
-      defaultItems: [
-        { title: "State Level Science Fair Winners", desc: "Our students won 3 gold medals at the State Science Fair 2025." },
-        { title: "100% Board Results", desc: "All students of Class 10 and 12 passed with distinction." },
-        { title: "National Sports Championship", desc: "School cricket team secured 2nd place in national championship." },
-      ],
     },
     gallery: {
       title: "Gallery",
@@ -59,11 +54,10 @@ export const translations = {
         sports: "Sports",
         annualDay: "Annual Day",
         academic: "Academic",
-      },
+      } as Record<string, string>,
     },
     principal: {
       title: "From the Principal's Desk",
-      defaultMessage: "Dear Students and Parents,\n\nAt EduPort, we believe in creating an environment where every child can discover their potential and develop the skills needed for the future. Our dedicated faculty works tirelessly to provide not just academic excellence but also to nurture values of integrity, compassion, and perseverance.\n\nWe encourage parents to actively participate in their child's educational journey. Together, we can build a brighter future.\n\nWarm regards",
     },
     contact: {
       title: "Contact & Feedback",
@@ -77,9 +71,6 @@ export const translations = {
       schoolPhone: "School Phone",
       schoolAddress: "School Address",
       formTitle: "Send us a message",
-      defaultEmail: "info@eduport.school",
-      defaultPhone: "+91 12345 67890",
-      defaultAddress: "123 Education Lane, Knowledge City, Maharashtra 411001",
     },
     visiting: {
       title: "Visiting Hours",
@@ -87,7 +78,6 @@ export const translations = {
       days: "Monday to Friday",
       time: "10:00 AM – 1:00 PM",
       note: "Parents are requested to follow school guidelines before visiting.",
-      defaultContent: "Parents and guardians are welcome to meet teachers during the designated visiting hours. Please ensure you carry a valid ID and inform the school office in advance.\n\nFor urgent matters, please contact the school office directly.",
     },
     admin: {
       title: "Admin Dashboard",
@@ -99,6 +89,8 @@ export const translations = {
       registerBtn: "Create Account",
       noAccount: "Don't have an account?",
       hasAccount: "Already have an account?",
+      firstUserNote: "The first registered user will be assigned as Admin.",
+      notAdmin: "Only the first registered user gets admin access.",
       tabs: {
         announcements: "Announcements",
         gallery: "Gallery",
@@ -109,7 +101,7 @@ export const translations = {
         banner: "Banner",
         messages: "Messages",
         spotlight: "Spotlight",
-      },
+      } as Record<string, string>,
       add: "Add",
       edit: "Edit",
       delete: "Delete",
@@ -121,7 +113,6 @@ export const translations = {
       categoryField: "Category",
       imageUrl: "Image URL",
       caption: "Caption",
-      upload: "Upload",
     },
     footer: {
       quickLinks: "Quick Links",
@@ -172,15 +163,10 @@ export const translations = {
         "5-8": "५वी–८वी",
         "9-10": "९वी–१०वी",
         "11-12": "११वी–१२वी",
-      },
+      } as Record<string, string>,
     },
     achievements: {
       title: "उपलब्धी",
-      defaultItems: [
-        { title: "राज्यस्तरीय विज्ञान प्रदर्शन विजेते", desc: "आमच्या विद्यार्थ्यांनी राज्य विज्ञान प्रदर्शन २०२५ मध्ये ३ सुवर्णपदके जिंकली." },
-        { title: "१००% बोर्ड निकाल", desc: "इयत्ता १०वी आणि १२वीच्या सर्व विद्यार्थ्यांनी प्रथम श्रेणीत उत्तीर्ण." },
-        { title: "राष्ट्रीय क्रीडा स्पर्धा", desc: "शाळेच्या क्रिकेट संघाने राष्ट्रीय स्पर्धेत द्वितीय स्थान मिळवले." },
-      ],
     },
     gallery: {
       title: "गॅलरी",
@@ -191,11 +177,10 @@ export const translations = {
         sports: "क्रीडा",
         annualDay: "वार्षिक दिन",
         academic: "शैक्षणिक",
-      },
+      } as Record<string, string>,
     },
     principal: {
       title: "मुख्याध्यापकांच्या लेखणीतून",
-      defaultMessage: "प्रिय विद्यार्थी आणि पालक,\n\nEduPort मध्ये, आम्ही अशा वातावरणाची निर्मिती करण्यावर विश्वास ठेवतो जिथे प्रत्येक मूल आपली क्षमता शोधू शकेल आणि भविष्यासाठी आवश्यक कौशल्ये विकसित करू शकेल. आमचे समर्पित शिक्षक केवळ शैक्षणिक उत्कृष्टताच नव्हे तर सचोटी, करुणा आणि चिकाटीची मूल्ये जोपासण्यासाठी अथक परिश्रम करतात.\n\nआम्ही पालकांना त्यांच्या मुलाच्या शैक्षणिक प्रवासात सक्रियपणे सहभागी होण्यास प्रोत्साहित करतो. एकत्रितपणे, आपण एक उज्ज्वल भविष्य घडवू शकतो.\n\nसस्नेह",
     },
     contact: {
       title: "संपर्क आणि अभिप्राय",
@@ -209,9 +194,6 @@ export const translations = {
       schoolPhone: "शाळेचा फोन",
       schoolAddress: "शाळेचा पत्ता",
       formTitle: "आम्हाला संदेश पाठवा",
-      defaultEmail: "info@eduport.school",
-      defaultPhone: "+९१ १२३४५ ६७८९०",
-      defaultAddress: "१२३ शिक्षण लेन, ज्ञान शहर, महाराष्ट्र ४११००१",
     },
     visiting: {
       title: "भेटीचे तास",
@@ -219,7 +201,6 @@ export const translations = {
       days: "सोमवार ते शुक्रवार",
       time: "सकाळी १०:०० – दुपारी १:००",
       note: "पालकांना भेट देण्यापूर्वी शाळेच्या मार्गदर्शक तत्त्वांचे पालन करण्याची विनंती आहे.",
-      defaultContent: "पालक आणि पालकांचे नियुक्त भेटीच्या तासांमध्ये शिक्षकांना भेटण्यासाठी स्वागत आहे. कृपया वैध ओळखपत्र बाळगा आणि शाळेच्या कार्यालयाला आगाऊ सूचित करा.\n\nतातडीच्या बाबींसाठी, कृपया शाळेच्या कार्यालयाशी थेट संपर्क साधा.",
     },
     admin: {
       title: "प्रशासक डॅशबोर्ड",
@@ -231,6 +212,8 @@ export const translations = {
       registerBtn: "खाते तयार करा",
       noAccount: "खाते नाही?",
       hasAccount: "आधीच खाते आहे?",
+      firstUserNote: "प्रथम नोंदणीकृत वापरकर्ता प्रशासक म्हणून नियुक्त केला जाईल.",
+      notAdmin: "फक्त प्रथम नोंदणीकृत वापरकर्त्यालाच प्रशासक प्रवेश मिळतो.",
       tabs: {
         announcements: "सूचना",
         gallery: "गॅलरी",
@@ -241,7 +224,7 @@ export const translations = {
         banner: "बॅनर",
         messages: "संदेश",
         spotlight: "स्पॉटलाइट",
-      },
+      } as Record<string, string>,
       add: "जोडा",
       edit: "संपादन",
       delete: "हटवा",
@@ -253,7 +236,6 @@ export const translations = {
       categoryField: "वर्ग",
       imageUrl: "प्रतिमा URL",
       caption: "शीर्षक",
-      upload: "अपलोड",
     },
     footer: {
       quickLinks: "जलद दुवे",
@@ -263,7 +245,7 @@ export const translations = {
       tagline: "मनांना सक्षम करणे, भविष्य घडवणे",
     },
   },
-} as const;
+};
 
 export type Language = "en" | "mr";
 export type TranslationKeys = typeof translations.en;
