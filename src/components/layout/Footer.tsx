@@ -85,8 +85,14 @@ const Footer: React.FC = () => {
           </div>
         </div>
 
-        <div className="mt-8 pt-6 border-t border-primary-foreground/20 text-center text-sm text-primary-foreground/50">
-          {t.footer.rights}
+        <div className="mt-8 pt-6 border-t border-primary-foreground/20 flex items-center justify-between text-sm text-primary-foreground/50">
+          <span>{t.footer.rights}</span>
+          <Link
+            to="/admin-login"
+            className="text-primary-foreground/30 hover:text-primary-foreground/50 transition-colors text-xs"
+          >
+            {t.nav.adminLogin}
+          </Link>
         </div>
       </div>
     </footer>

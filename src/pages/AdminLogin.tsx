@@ -50,7 +50,7 @@ const AdminLogin: React.FC = () => {
             <GraduationCap className="w-8 h-8 text-primary-foreground" />
           </div>
           <h1 className="font-heading font-bold text-3xl">{isRegister ? t.admin.register : t.admin.login}</h1>
-          <p className="text-sm text-muted-foreground mt-2">{t.admin.firstUserNote}</p>
+          
         </div>
 
         <form onSubmit={handleSubmit} className="bg-card rounded-xl p-8 border space-y-4">

@@ -61,7 +61,7 @@ const Navbar: React.FC = () => {
             {lang === "en" ? "मराठी" : "English"}
           </button>
 
-          {isAdmin ? (
+          {isAdmin && (
             <div className="hidden md:flex items-center gap-2">
               <Link
                 to="/admin"
@@ -76,13 +76,6 @@ const Navbar: React.FC = () => {
                 {t.nav.logout}
               </button>
             </div>
-          ) : (
-            <Link
-              to="/admin-login"
-              className="hidden md:inline-flex px-3 py-1.5 rounded-md text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-            >
-              {t.nav.adminLogin}
-            </Link>
           )}
 
           <button
@@ -111,33 +104,23 @@ const Navbar: React.FC = () => {
               {link.label}
             </Link>
           ))}
-          <div className="pt-2 border-t">
-            {isAdmin ? (
-              <>
-                <Link
-                  to="/admin"
-                  onClick={() => setMobileOpen(false)}
-                  className="block px-3 py-2 rounded-md text-sm font-medium bg-primary text-primary-foreground"
-                >
-                  {t.nav.dashboard}
-                </Link>
-                <button
-                  onClick={() => { adminLogout(); setMobileOpen(false); }}
-                  className="block w-full text-left px-3 py-2 rounded-md text-sm text-muted-foreground"
-                >
-                  {t.nav.logout}
-                </button>
-              </>
-            ) : (
+          {isAdmin && (
+            <div className="pt-2 border-t">
               <Link
-                to="/admin-login"
+                to="/admin"
                 onClick={() => setMobileOpen(false)}
-                className="block px-3 py-2 rounded-md text-sm text-muted-foreground"
+                className="block px-3 py-2 rounded-md text-sm font-medium bg-primary text-primary-foreground"
               >
-                {t.nav.adminLogin}
+                {t.nav.dashboard}
               </Link>
-            )}
-          </div>
+              <button
+                onClick={() => { adminLogout(); setMobileOpen(false); }}
+                className="block w-full text-left px-3 py-2 rounded-md text-sm text-muted-foreground"
+              >
+                {t.nav.logout}
+              </button>
+            </div>
+          )}
         </div>
       )}
     </nav>
