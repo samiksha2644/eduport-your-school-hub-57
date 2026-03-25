@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Navigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useData, Announcement, GalleryItem, Achievement } from "@/contexts/DataContext";
-import { Plus, Trash2, Save, Megaphone, Image, Trophy, BookOpen, Clock, MessageSquare, Star, ImageIcon } from "lucide-react";
+import { Plus, Trash2, Save, Megaphone, Image, Trophy, BookOpen, Clock, MessageSquare, Star, ImageIcon, Upload, CheckCircle, AlertCircle } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "@/hooks/use-toast";
 
 const AdminDashboard: React.FC = () => {
   const { lang, t } = useLanguage();
@@ -111,18 +113,74 @@ function AnnouncementsTab() {
 function GalleryTab() {
   const { data, addGalleryItem, deleteGalleryItem } = useData();
   const { t } = useLanguage();
-  const [form, setForm] = useState({ url: "", captionEn: "", captionMr: "", category: "events" });
+  const [form, setForm] = useState({ captionEn: "", captionMr: "", category: "events" });
+  const [file, setFile] = useState<File | null>(null);
+  const [preview, setPreview] = useState<string | null>(null);
+  const [uploading, setUploading] = useState(false);
+  const fileRef = useRef<HTMLInputElement>(null);
 
-  const handleAdd = () => {
-    if (!form.url) return;
-    addGalleryItem(form);
-    setForm({ url: "", captionEn: "", captionMr: "", category: "events" });
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const f = e.target.files?.[0];
+    if (f) {
+      setFile(f);
+      setPreview(URL.createObjectURL(f));
+    }
+  };
+
+  const handleAdd = async () => {
+    if (!file) return;
+    setUploading(true);
+    try {
+      const ext = file.name.split(".").pop();
+      const path = `gallery/${Date.now()}.${ext}`;
+      const { error } = await supabase.storage.from("images").upload(path, file);
+      if (error) throw error;
+      const { data: urlData } = supabase.storage.from("images").getPublicUrl(path);
+      addGalleryItem({ url: urlData.publicUrl, ...form });
+      setForm({ captionEn: "", captionMr: "", category: "events" });
+      setFile(null);
+      setPreview(null);
+      if (fileRef.current) fileRef.current.value = "";
+      toast({ title: "Image uploaded successfully!" });
+    } catch (err: any) {
+      toast({ title: "Upload failed", description: err.message, variant: "destructive" });
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleDelete = async (item: GalleryItem) => {
+    try {
+      // Try to extract storage path from URL
+      const url = item.url;
+      const match = url.match(/images\/(.+)$/);
+      if (match) {
+        await supabase.storage.from("images").remove([match[1]]);
+      }
+      deleteGalleryItem(item.id);
+      toast({ title: "Image deleted." });
+    } catch {
+      deleteGalleryItem(item.id);
+    }
   };
 
   return (
     <div className="space-y-6">
       <div className="grid md:grid-cols-2 gap-4 p-4 bg-background rounded-lg border">
-        <input className={inputClass} placeholder="Image URL" value={form.url} onChange={(e) => setForm({ ...form, url: e.target.value })} />
+        <div className="md:col-span-2">
+          <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-lg cursor-pointer hover:bg-secondary/50 transition-colors">
+            <div className="flex flex-col items-center justify-center pt-5 pb-6">
+              <Upload className="w-8 h-8 text-muted-foreground mb-2" />
+              <p className="text-sm text-muted-foreground">{file ? file.name : "Click to choose image"}</p>
+            </div>
+            <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleFileChange} />
+          </label>
+        </div>
+        {preview && (
+          <div className="md:col-span-2">
+            <img src={preview} alt="Preview" className="max-h-40 rounded-lg object-cover" />
+          </div>
+        )}
         <select className={inputClass} value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })}>
           <option value="events">Events</option>
           <option value="sports">Sports</option>
@@ -131,7 +189,9 @@ function GalleryTab() {
         </select>
         <input className={inputClass} placeholder="Caption (English)" value={form.captionEn} onChange={(e) => setForm({ ...form, captionEn: e.target.value })} />
         <input className={inputClass} placeholder="शीर्षक (मराठी)" value={form.captionMr} onChange={(e) => setForm({ ...form, captionMr: e.target.value })} />
-        <button onClick={handleAdd} className={btnPrimary}><Plus className="w-4 h-4" /> {t.admin.add}</button>
+        <button onClick={handleAdd} disabled={uploading || !file} className={`${btnPrimary} ${uploading ? "opacity-50" : ""}`}>
+          {uploading ? "Uploading..." : <><Plus className="w-4 h-4" /> {t.admin.add}</>}
+        </button>
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -139,7 +199,7 @@ function GalleryTab() {
           <div key={g.id} className="relative group">
             <img src={g.url} alt={g.captionEn} className="w-full aspect-square object-cover rounded-lg" loading="lazy" />
             <button
-              onClick={() => deleteGalleryItem(g.id)}
+              onClick={() => handleDelete(g)}
               className="absolute top-2 right-2 p-1.5 rounded-full bg-destructive text-destructive-foreground opacity-0 group-hover:opacity-100 transition-opacity"
             >
               <Trash2 className="w-3 h-3" />
@@ -255,15 +315,52 @@ function VisitingTab() {
 function BannerTab() {
   const { data, updateData } = useData();
   const { t } = useLanguage();
-  const [url, setUrl] = useState(data.bannerImage);
+  const [file, setFile] = useState<File | null>(null);
+  const [preview, setPreview] = useState<string | null>(data.bannerImage || null);
+  const [uploading, setUploading] = useState(false);
+  const fileRef = useRef<HTMLInputElement>(null);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const f = e.target.files?.[0];
+    if (f) {
+      setFile(f);
+      setPreview(URL.createObjectURL(f));
+    }
+  };
+
+  const handleUpload = async () => {
+    if (!file) return;
+    setUploading(true);
+    try {
+      const ext = file.name.split(".").pop();
+      const path = `banner/${Date.now()}.${ext}`;
+      const { error } = await supabase.storage.from("images").upload(path, file);
+      if (error) throw error;
+      const { data: urlData } = supabase.storage.from("images").getPublicUrl(path);
+      updateData({ bannerImage: urlData.publicUrl });
+      setFile(null);
+      if (fileRef.current) fileRef.current.value = "";
+      toast({ title: "Banner image updated!" });
+    } catch (err: any) {
+      toast({ title: "Upload failed", description: err.message, variant: "destructive" });
+    } finally {
+      setUploading(false);
+    }
+  };
 
   return (
     <div className="space-y-4">
-      <h3 className="font-semibold">Banner Image URL</h3>
-      <input className={inputClass} placeholder="https://..." value={url} onChange={(e) => setUrl(e.target.value)} />
-      {url && <img src={url} alt="Preview" className="max-h-48 rounded-lg object-cover" />}
-      <button onClick={() => updateData({ bannerImage: url })} className={btnPrimary}>
-        <Save className="w-4 h-4" /> {t.admin.save}
+      <h3 className="font-semibold">Banner Image</h3>
+      <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-lg cursor-pointer hover:bg-secondary/50 transition-colors">
+        <div className="flex flex-col items-center justify-center pt-5 pb-6">
+          <Upload className="w-8 h-8 text-muted-foreground mb-2" />
+          <p className="text-sm text-muted-foreground">{file ? file.name : "Click to choose banner image"}</p>
+        </div>
+        <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleFileChange} />
+      </label>
+      {preview && <img src={preview} alt="Preview" className="max-h-48 rounded-lg object-cover" />}
+      <button onClick={handleUpload} disabled={uploading || !file} className={`${btnPrimary} ${uploading ? "opacity-50" : ""}`}>
+        {uploading ? "Uploading..." : <><Save className="w-4 h-4" /> {t.admin.save}</>}
       </button>
     </div>
   );
