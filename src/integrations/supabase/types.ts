@@ -14,7 +14,170 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      career_streams: {
+        Row: {
+          career_options_en: string
+          career_options_mr: string
+          category: string
+          created_at: string
+          future_scope_en: string
+          future_scope_mr: string
+          id: string
+          name_en: string
+          name_mr: string
+          skills_en: string
+          skills_mr: string
+          sort_order: number
+          subjects_en: string
+          subjects_mr: string
+        }
+        Insert: {
+          career_options_en?: string
+          career_options_mr?: string
+          category: string
+          created_at?: string
+          future_scope_en?: string
+          future_scope_mr?: string
+          id?: string
+          name_en: string
+          name_mr?: string
+          skills_en?: string
+          skills_mr?: string
+          sort_order?: number
+          subjects_en?: string
+          subjects_mr?: string
+        }
+        Update: {
+          career_options_en?: string
+          career_options_mr?: string
+          category?: string
+          created_at?: string
+          future_scope_en?: string
+          future_scope_mr?: string
+          id?: string
+          name_en?: string
+          name_mr?: string
+          skills_en?: string
+          skills_mr?: string
+          sort_order?: number
+          subjects_en?: string
+          subjects_mr?: string
+        }
+        Relationships: []
+      }
+      entrance_exams: {
+        Row: {
+          created_at: string
+          description_en: string
+          description_mr: string
+          id: string
+          name_en: string
+          name_mr: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          description_en?: string
+          description_mr?: string
+          id?: string
+          name_en: string
+          name_mr?: string
+          sort_order?: number
+        }
+        Update: {
+          created_at?: string
+          description_en?: string
+          description_mr?: string
+          id?: string
+          name_en?: string
+          name_mr?: string
+          sort_order?: number
+        }
+        Relationships: []
+      }
+      exam_resources: {
+        Row: {
+          created_at: string
+          exam_id: string
+          file_name: string
+          file_url: string
+          id: string
+        }
+        Insert: {
+          created_at?: string
+          exam_id: string
+          file_name: string
+          file_url: string
+          id?: string
+        }
+        Update: {
+          created_at?: string
+          exam_id?: string
+          file_name?: string
+          file_url?: string
+          id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "exam_resources_exam_id_fkey"
+            columns: ["exam_id"]
+            isOneToOne: false
+            referencedRelation: "exams"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      exams: {
+        Row: {
+          created_at: string
+          eligibility_en: string
+          eligibility_mr: string
+          exam_pattern_en: string
+          exam_pattern_mr: string
+          id: string
+          name_en: string
+          name_mr: string
+          overview_en: string
+          overview_mr: string
+          reference_links: Json
+          sort_order: number
+          syllabus_en: string
+          syllabus_mr: string
+        }
+        Insert: {
+          created_at?: string
+          eligibility_en?: string
+          eligibility_mr?: string
+          exam_pattern_en?: string
+          exam_pattern_mr?: string
+          id?: string
+          name_en: string
+          name_mr?: string
+          overview_en?: string
+          overview_mr?: string
+          reference_links?: Json
+          sort_order?: number
+          syllabus_en?: string
+          syllabus_mr?: string
+        }
+        Update: {
+          created_at?: string
+          eligibility_en?: string
+          eligibility_mr?: string
+          exam_pattern_en?: string
+          exam_pattern_mr?: string
+          id?: string
+          name_en?: string
+          name_mr?: string
+          overview_en?: string
+          overview_mr?: string
+          reference_links?: Json
+          sort_order?: number
+          syllabus_en?: string
+          syllabus_mr?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
