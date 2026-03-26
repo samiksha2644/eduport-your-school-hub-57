@@ -2,9 +2,11 @@ import React, { useState, useRef } from "react";
 import { Navigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useData, Announcement, GalleryItem, Achievement } from "@/contexts/DataContext";
-import { Plus, Trash2, Save, Megaphone, Image, Trophy, BookOpen, Clock, MessageSquare, Star, ImageIcon, Upload, CheckCircle, AlertCircle } from "lucide-react";
+import { Plus, Trash2, Save, Megaphone, Image, Trophy, BookOpen, Clock, MessageSquare, Star, ImageIcon, Upload, CheckCircle, AlertCircle, GraduationCap, Compass } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
+import ExaminationsAdmin from "./admin/ExaminationsAdmin";
+import CareerAdmin from "./admin/CareerAdmin";
 
 const AdminDashboard: React.FC = () => {
   const { lang, t } = useLanguage();
@@ -23,6 +25,8 @@ const AdminDashboard: React.FC = () => {
     { key: "banner", icon: ImageIcon },
     { key: "spotlight", icon: Star },
     { key: "messages", icon: MessageSquare },
+    { key: "examinations", icon: GraduationCap },
+    { key: "career", icon: Compass },
   ];
 
   return (
@@ -57,6 +61,8 @@ const AdminDashboard: React.FC = () => {
           {activeTab === "banner" && <BannerTab />}
           {activeTab === "spotlight" && <SpotlightTab />}
           {activeTab === "messages" && <MessagesTab />}
+          {activeTab === "examinations" && <ExaminationsAdmin />}
+          {activeTab === "career" && <CareerAdmin />}
         </div>
       </div>
     </div>
