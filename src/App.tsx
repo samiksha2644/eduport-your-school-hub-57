@@ -16,6 +16,8 @@ import Contact from "./pages/Contact";
 import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
 import NotFound from "./pages/NotFound";
+import ExaminationsPage from "./pages/ExaminationsPage";
+import CareerGuidancePage from "./pages/CareerGuidancePage";
 
 const queryClient = new QueryClient();
 
@@ -37,6 +39,8 @@ const App = () => (
                   <Route path="/announcements" element={<AnnouncementsPage />} />
                   <Route path="/visiting-hours" element={<VisitingHours />} />
                   <Route path="/contact" element={<Contact />} />
+                  <Route path="/examinations" element={<ExaminationsPage />} />
+                  <Route path="/career-guidance" element={<CareerGuidancePage />} />
                   <Route path="/admin-login" element={<AdminLogin />} />
                   <Route path="/admin" element={<AdminDashboard />} />
                   <Route path="*" element={<NotFound />} />
