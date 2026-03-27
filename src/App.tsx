@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { DataProvider } from "@/contexts/DataContext";
+import { AuthProvider } from "@/contexts/AuthContext";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import Index from "./pages/Index";
@@ -25,31 +26,33 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <LanguageProvider>
-        <DataProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <div className="flex flex-col min-h-screen">
-              <Navbar />
-              <main className="flex-1">
-                <Routes>
-                  <Route path="/" element={<Index />} />
-                  <Route path="/vision-mission" element={<VisionMission />} />
-                  <Route path="/gallery" element={<GalleryPage />} />
-                  <Route path="/announcements" element={<AnnouncementsPage />} />
-                  <Route path="/visiting-hours" element={<VisitingHours />} />
-                  <Route path="/contact" element={<Contact />} />
-                  <Route path="/examinations" element={<ExaminationsPage />} />
-                  <Route path="/career-guidance" element={<CareerGuidancePage />} />
-                  <Route path="/admin-login" element={<AdminLogin />} />
-                  <Route path="/admin" element={<AdminDashboard />} />
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
-              </main>
-              <Footer />
-            </div>
-          </BrowserRouter>
-        </DataProvider>
+        <AuthProvider>
+          <DataProvider>
+            <Toaster />
+            <Sonner />
+            <BrowserRouter>
+              <div className="flex flex-col min-h-screen">
+                <Navbar />
+                <main className="flex-1">
+                  <Routes>
+                    <Route path="/" element={<Index />} />
+                    <Route path="/vision-mission" element={<VisionMission />} />
+                    <Route path="/gallery" element={<GalleryPage />} />
+                    <Route path="/announcements" element={<AnnouncementsPage />} />
+                    <Route path="/visiting-hours" element={<VisitingHours />} />
+                    <Route path="/contact" element={<Contact />} />
+                    <Route path="/examinations" element={<ExaminationsPage />} />
+                    <Route path="/career-guidance" element={<CareerGuidancePage />} />
+                    <Route path="/admin-login" element={<AdminLogin />} />
+                    <Route path="/admin" element={<AdminDashboard />} />
+                    <Route path="*" element={<NotFound />} />
+                  </Routes>
+                </main>
+                <Footer />
+              </div>
+            </BrowserRouter>
+          </DataProvider>
+        </AuthProvider>
       </LanguageProvider>
     </TooltipProvider>
   </QueryClientProvider>

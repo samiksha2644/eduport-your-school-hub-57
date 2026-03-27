@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { useData } from "@/contexts/DataContext";
+import { useAuth } from "@/contexts/AuthContext";
 import { Menu, X, Globe, GraduationCap } from "lucide-react";
 
 const Navbar: React.FC = () => {
   const { lang, t, toggleLanguage } = useLanguage();
-  const { isAdmin, adminLogout } = useData();
+  const { isAdmin, signOut } = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
 
@@ -26,17 +26,13 @@ const Navbar: React.FC = () => {
   return (
     <nav className="sticky top-0 z-50 bg-card/95 backdrop-blur-md border-b shadow-sm">
       <div className="container mx-auto flex items-center justify-between h-16 px-4">
-        {/* Logo */}
         <Link to="/" className="flex items-center gap-2">
           <div className="w-9 h-9 rounded-lg bg-primary flex items-center justify-center">
             <GraduationCap className="w-5 h-5 text-primary-foreground" />
           </div>
-          <span className="font-heading font-bold text-xl text-foreground">
-            EduPort
-          </span>
+          <span className="font-heading font-bold text-xl text-foreground">EduPort</span>
         </Link>
 
-        {/* Desktop Nav */}
         <div className="hidden lg:flex items-center gap-1">
           {links.map((link) => (
             <Link
@@ -53,7 +49,6 @@ const Navbar: React.FC = () => {
           ))}
         </div>
 
-        {/* Right side */}
         <div className="flex items-center gap-2">
           <button
             onClick={toggleLanguage}
@@ -72,7 +67,7 @@ const Navbar: React.FC = () => {
                 {t.nav.dashboard}
               </Link>
               <button
-                onClick={adminLogout}
+                onClick={() => signOut()}
                 className="px-3 py-1.5 rounded-md text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
               >
                 {t.nav.logout}
@@ -89,7 +84,6 @@ const Navbar: React.FC = () => {
         </div>
       </div>
 
-      {/* Mobile menu */}
       {mobileOpen && (
         <div className="lg:hidden bg-card border-t px-4 py-3 space-y-1">
           {links.map((link) => (
@@ -116,7 +110,7 @@ const Navbar: React.FC = () => {
                 {t.nav.dashboard}
               </Link>
               <button
-                onClick={() => { adminLogout(); setMobileOpen(false); }}
+                onClick={() => { signOut(); setMobileOpen(false); }}
                 className="block w-full text-left px-3 py-2 rounded-md text-sm text-muted-foreground"
               >
                 {t.nav.logout}
