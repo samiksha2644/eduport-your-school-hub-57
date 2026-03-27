@@ -56,12 +56,6 @@ export interface SiteData {
   schoolAddress: string;
 }
 
-interface AdminUser {
-  email: string;
-  password: string;
-  isAdmin: boolean;
-}
-
 interface DataContextType {
   data: SiteData;
   updateData: (updates: Partial<SiteData>) => void;
@@ -73,10 +67,6 @@ interface DataContextType {
   deleteAchievement: (id: string) => void;
   addContactMessage: (m: Omit<ContactMessage, "id" | "date">) => void;
   deleteContactMessage: (id: string) => void;
-  isAdmin: boolean;
-  adminLogin: (email: string, password: string) => boolean;
-  adminRegister: (email: string, password: string) => boolean;
-  adminLogout: () => void;
 }
 
 const defaultData: SiteData = {
@@ -116,10 +106,6 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [data, setData] = useState<SiteData>(() => {
     const saved = localStorage.getItem("eduport_data");
     return saved ? { ...defaultData, ...JSON.parse(saved) } : defaultData;
-  });
-
-  const [isAdmin, setIsAdmin] = useState(() => {
-    return localStorage.getItem("eduport_admin_session") === "true";
   });
 
   useEffect(() => {
@@ -165,35 +151,6 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setData((prev) => ({ ...prev, contactMessages: prev.contactMessages.filter((m) => m.id !== id) }));
   }, []);
 
-  const adminLogin = useCallback((email: string, password: string) => {
-    const users: AdminUser[] = JSON.parse(localStorage.getItem("eduport_users") || "[]");
-    const user = users.find((u) => u.email === email && u.password === password && u.isAdmin);
-    if (user) {
-      setIsAdmin(true);
-      localStorage.setItem("eduport_admin_session", "true");
-      return true;
-    }
-    return false;
-  }, []);
-
-  const adminRegister = useCallback((email: string, password: string) => {
-    const users: AdminUser[] = JSON.parse(localStorage.getItem("eduport_users") || "[]");
-    if (users.find((u) => u.email === email)) return false;
-    const isFirst = users.length === 0;
-    users.push({ email, password, isAdmin: isFirst });
-    localStorage.setItem("eduport_users", JSON.stringify(users));
-    if (isFirst) {
-      setIsAdmin(true);
-      localStorage.setItem("eduport_admin_session", "true");
-    }
-    return true;
-  }, []);
-
-  const adminLogout = useCallback(() => {
-    setIsAdmin(false);
-    localStorage.removeItem("eduport_admin_session");
-  }, []);
-
   return (
     <DataContext.Provider
       value={{
@@ -202,7 +159,6 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
         addGalleryItem, deleteGalleryItem,
         addAchievement, deleteAchievement,
         addContactMessage, deleteContactMessage,
-        isAdmin, adminLogin, adminRegister, adminLogout,
       }}
     >
       {children}

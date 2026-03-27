@@ -2,6 +2,7 @@ import React, { useState, useRef } from "react";
 import { Navigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useData, Announcement, GalleryItem, Achievement } from "@/contexts/DataContext";
+import { useAuth } from "@/contexts/AuthContext";
 import { Plus, Trash2, Save, Megaphone, Image, Trophy, BookOpen, Clock, MessageSquare, Star, ImageIcon, Upload, CheckCircle, AlertCircle, GraduationCap, Compass } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
@@ -10,9 +11,11 @@ import CareerAdmin from "./admin/CareerAdmin";
 
 const AdminDashboard: React.FC = () => {
   const { lang, t } = useLanguage();
-  const { data, updateData, isAdmin, addAnnouncement, deleteAnnouncement, addGalleryItem, deleteGalleryItem, addAchievement, deleteAchievement, deleteContactMessage } = useData();
+  const { data, updateData, addAnnouncement, deleteAnnouncement, addGalleryItem, deleteGalleryItem, addAchievement, deleteAchievement, deleteContactMessage } = useData();
+  const { isAdmin, isLoading } = useAuth();
   const [activeTab, setActiveTab] = useState("announcements");
 
+  if (isLoading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div></div>;
   if (!isAdmin) return <Navigate to="/admin-login" />;
 
   const tabs = [
