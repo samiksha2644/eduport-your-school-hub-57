@@ -18,13 +18,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [isLoading, setIsLoading] = useState(true);
 
   const checkAdminRole = useCallback(async (userId: string) => {
-    const { data } = await supabase
-      .from("user_roles")
-      .select("role")
-      .eq("user_id", userId)
-      .eq("role", "admin")
-      .maybeSingle();
-    setIsAdmin(!!data);
+    const { data, error } = await supabase.rpc("has_role" as any, {
+      _user_id: userId,
+      _role: "admin",
+    });
+    setIsAdmin(data === true);
   }, []);
 
   useEffect(() => {
