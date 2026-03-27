@@ -6,9 +6,8 @@ import { GraduationCap, LogIn } from "lucide-react";
 
 const AdminLogin: React.FC = () => {
   const { t } = useLanguage();
-  const { user, isAdmin, isLoading, signIn, signUp } = useAuth();
+  const { user, isAdmin, isLoading, signIn } = useAuth();
   const navigate = useNavigate();
-  const [isRegister, setIsRegister] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
