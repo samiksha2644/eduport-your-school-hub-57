@@ -23,22 +23,9 @@ const AdminLogin: React.FC = () => {
     setLoading(true);
 
     try {
-      if (isRegister) {
-        const result = await signUp(email, password);
-        if (result.error) {
-          setError(result.error);
-        } else {
-          // After signup, try signing in
-          const loginResult = await signIn(email, password);
-          if (loginResult.error) {
-            setError("Account created. Please check your email to verify, then log in.");
-          }
-        }
-      } else {
-        const result = await signIn(email, password);
-        if (result.error) {
-          setError(result.error);
-        }
+      const result = await signIn(email, password);
+      if (result.error) {
+        setError(result.error);
       }
     } catch (err: any) {
       setError(err.message || "An error occurred");
@@ -62,7 +49,7 @@ const AdminLogin: React.FC = () => {
           <div className="w-16 h-16 rounded-2xl bg-primary flex items-center justify-center mx-auto mb-4">
             <GraduationCap className="w-8 h-8 text-primary-foreground" />
           </div>
-          <h1 className="font-heading font-bold text-3xl">{isRegister ? t.admin.register : t.admin.login}</h1>
+          <h1 className="font-heading font-bold text-3xl">{t.admin.login}</h1>
         </div>
 
         <form onSubmit={handleSubmit} className="bg-card rounded-xl p-8 border space-y-4">
@@ -88,18 +75,8 @@ const AdminLogin: React.FC = () => {
             className="w-full py-3 bg-primary text-primary-foreground font-semibold rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center gap-2 disabled:opacity-50"
           >
             <LogIn className="w-4 h-4" />
-            {loading ? "Please wait..." : (isRegister ? t.admin.registerBtn : t.admin.loginBtn)}
+            {loading ? "Please wait..." : t.admin.loginBtn}
           </button>
-          <p className="text-center text-sm text-muted-foreground">
-            {isRegister ? t.admin.hasAccount : t.admin.noAccount}{" "}
-            <button
-              type="button"
-              onClick={() => { setIsRegister(!isRegister); setError(""); }}
-              className="text-primary font-semibold hover:underline"
-            >
-              {isRegister ? t.admin.loginBtn : t.admin.registerBtn}
-            </button>
-          </p>
         </form>
       </div>
     </div>
