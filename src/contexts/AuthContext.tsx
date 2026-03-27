@@ -26,21 +26,26 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   useEffect(() => {
-    // Set up listener FIRST
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
-        const currentUser = session?.user ?? null;
-        setUser(currentUser);
-        if (currentUser) {
-          // Fire-and-forget; don't await inside callback
-          checkAdminRole(currentUser.id);
-        } else {
-          setIsAdmin(false);
-        }
-      }
-    );
+    let subscription: any = null;
 
-    // Then check existing session
+    try {
+      const { data } = supabase.auth.onAuthStateChange(
+        (_event, session) => {
+          const currentUser = session?.user ?? null;
+          setUser(currentUser);
+          if (currentUser) {
+            checkAdminRole(currentUser.id);
+          } else {
+            setIsAdmin(false);
+          }
+        }
+      );
+      subscription = data.subscription;
+    } catch (err) {
+      console.error("Auth listener error:", err);
+      setIsLoading(false);
+    }
+
     supabase.auth.getSession().then(({ data: { session } }) => {
       const currentUser = session?.user ?? null;
       setUser(currentUser);
@@ -49,9 +54,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       } else {
         setIsLoading(false);
       }
+    }).catch(() => {
+      setIsLoading(false);
     });
 
-    return () => subscription.unsubscribe();
+    return () => {
+      if (subscription) subscription.unsubscribe();
+    };
   }, [checkAdminRole]);
 
   const signIn = useCallback(async (email: string, password: string) => {
