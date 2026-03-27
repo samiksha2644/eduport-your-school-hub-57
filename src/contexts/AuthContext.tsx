@@ -18,7 +18,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [isLoading, setIsLoading] = useState(true);
 
   const checkAdminRole = useCallback(async (userId: string) => {
-    const { data, error } = await supabase.rpc("has_role" as any, {
+    const { data } = await (supabase as any).rpc("has_role", {
       _user_id: userId,
       _role: "admin",
     });
