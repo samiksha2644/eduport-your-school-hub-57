@@ -1,16 +1,33 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { useData } from "@/contexts/DataContext";
+import { supabase } from "@/integrations/supabase/client";
 import { X } from "lucide-react";
+
+interface GalleryItem {
+  id: string;
+  url: string;
+  caption_en: string;
+  caption_mr: string;
+  category: string;
+}
 
 const GalleryPage: React.FC = () => {
   const { lang, t } = useLanguage();
-  const { data } = useData();
+  const [items, setItems] = useState<GalleryItem[]>([]);
   const [filter, setFilter] = useState("all");
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
+  useEffect(() => {
+    fetchGallery();
+  }, []);
+
+  const fetchGallery = async () => {
+    const { data } = await supabase.from("gallery_items").select("*").order("created_at", { ascending: false });
+    if (data) setItems(data);
+  };
+
   const categories = Object.entries(t.gallery.categories);
-  const filtered = filter === "all" ? data.gallery : data.gallery.filter((g) => g.category === filter);
+  const filtered = filter === "all" ? items : items.filter((g) => g.category === filter);
 
   return (
     <div className="min-h-screen py-16">
@@ -43,7 +60,7 @@ const GalleryPage: React.FC = () => {
               >
                 <img
                   src={g.url}
-                  alt={lang === "en" ? g.captionEn : g.captionMr}
+                  alt={lang === "en" ? g.caption_en : g.caption_mr}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   loading="lazy"
                 />
@@ -55,7 +72,6 @@ const GalleryPage: React.FC = () => {
         )}
       </div>
 
-      {/* Lightbox */}
       {selectedImage && (
         <div
           className="fixed inset-0 z-50 bg-foreground/80 flex items-center justify-center p-4"
