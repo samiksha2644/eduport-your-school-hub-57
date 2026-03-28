@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { supabase } from "@/integrations/supabase/client";
-import { ChevronDown, Compass, GraduationCap, BookOpen } from "lucide-react";
+import { ChevronDown, Compass, GraduationCap, BookOpen, Play } from "lucide-react";
+import YouTubeEmbed from "@/components/YouTubeEmbed";
 
 interface CareerStream {
   id: string;
@@ -16,6 +17,7 @@ interface CareerStream {
   skills_mr: string;
   future_scope_en: string;
   future_scope_mr: string;
+  video_url: string;
 }
 
 interface EntranceExam {
@@ -24,6 +26,7 @@ interface EntranceExam {
   name_mr: string;
   description_en: string;
   description_mr: string;
+  video_url: string;
 }
 
 const CareerGuidancePage: React.FC = () => {
@@ -95,6 +98,7 @@ const CareerGuidancePage: React.FC = () => {
                 {renderBullets(lang === "en" ? field.en : field.mr)}
               </div>
             ))}
+            {stream.video_url && <YouTubeEmbed url={stream.video_url} title={t.career.recommendedVideo} />}
           </div>
         )}
       </div>
@@ -182,10 +186,11 @@ const CareerGuidancePage: React.FC = () => {
                           />
                         </button>
                         {isOpen && (
-                          <div className="px-4 pb-4 pt-1">
+                          <div className="px-4 pb-4 pt-1 space-y-4">
                             <p className="text-sm text-foreground/80 leading-relaxed">
                               {lang === "en" ? exam.description_en : exam.description_mr}
                             </p>
+                            {exam.video_url && <YouTubeEmbed url={exam.video_url} title={t.career.recommendedVideo} />}
                           </div>
                         )}
                       </div>

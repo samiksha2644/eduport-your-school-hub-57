@@ -106,6 +106,7 @@ export const translations = {
       futureScope: "Future Scope",
       noStreams: "No streams added yet.",
       noEntranceExams: "No entrance exams added yet.",
+      recommendedVideo: "Recommended Video (Marathi)",
     },
     admin: {
       title: "Admin Dashboard",
@@ -259,6 +260,7 @@ export const translations = {
       futureScope: "भविष्यातील संधी",
       noStreams: "अद्याप कोणतेही विषय जोडले नाहीत.",
       noEntranceExams: "अद्याप कोणत्याही प्रवेश परीक्षा जोडल्या नाहीत.",
+      recommendedVideo: "शिफारस केलेला व्हिडिओ (मराठी)",
     },
     admin: {
       title: "प्रशासक डॅशबोर्ड",
