@@ -18,19 +18,26 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [isLoading, setIsLoading] = useState(true);
 
   const checkAdminRole = useCallback(async (userId: string) => {
-    const { data } = await (supabase as any).rpc("has_role", {
-      _user_id: userId,
-      _role: "admin",
-    });
-    setIsAdmin(data === true);
+    try {
+      const { data } = await supabase.rpc("has_role", {
+        _user_id: userId,
+        _role: "admin",
+      });
+      setIsAdmin(data === true);
+    } catch (err) {
+      console.error("Admin role check failed:", err);
+      setIsAdmin(false);
+    }
   }, []);
 
   useEffect(() => {
-    let subscription: any = null;
+    let subscription: { unsubscribe: () => void } | null = null;
+    let mounted = true;
 
-    try {
-      const { data } = supabase.auth.onAuthStateChange(
-        (_event, session) => {
+    const init = async () => {
+      try {
+        const { data } = supabase.auth.onAuthStateChange((_event, session) => {
+          if (!mounted) return;
           const currentUser = session?.user ?? null;
           setUser(currentUser);
           if (currentUser) {
@@ -38,28 +45,32 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           } else {
             setIsAdmin(false);
           }
-        }
-      );
-      subscription = data.subscription;
-    } catch (err) {
-      console.error("Auth listener error:", err);
-      setIsLoading(false);
-    }
-
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      const currentUser = session?.user ?? null;
-      setUser(currentUser);
-      if (currentUser) {
-        checkAdminRole(currentUser.id).finally(() => setIsLoading(false));
-      } else {
-        setIsLoading(false);
+        });
+        subscription = data.subscription;
+      } catch (err) {
+        console.error("Auth listener error:", err);
       }
-    }).catch(() => {
-      setIsLoading(false);
-    });
+
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!mounted) return;
+        const currentUser = session?.user ?? null;
+        setUser(currentUser);
+        if (currentUser) {
+          await checkAdminRole(currentUser.id);
+        }
+      } catch (err) {
+        console.error("Get session error:", err);
+      } finally {
+        if (mounted) setIsLoading(false);
+      }
+    };
+
+    init();
 
     return () => {
-      if (subscription) subscription.unsubscribe();
+      mounted = false;
+      subscription?.unsubscribe();
     };
   }, [checkAdminRole]);
 
