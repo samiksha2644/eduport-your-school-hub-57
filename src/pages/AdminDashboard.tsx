@@ -120,13 +120,20 @@ function AnnouncementsTab() {
 }
 
 function GalleryTab() {
-  const { data, addGalleryItem, deleteGalleryItem } = useData();
   const { t } = useLanguage();
+  const [galleryItems, setGalleryItems] = useState<{ id: string; url: string; caption_en: string; caption_mr: string; category: string }[]>([]);
   const [form, setForm] = useState({ captionEn: "", captionMr: "", category: "events" });
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
+
+  const fetchGallery = async () => {
+    const { data } = await supabase.from("gallery_items").select("*").order("created_at", { ascending: false });
+    if (data) setGalleryItems(data);
+  };
+
+  React.useEffect(() => { fetchGallery(); }, []);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files?.[0];
@@ -142,10 +149,17 @@ function GalleryTab() {
     try {
       const ext = file.name.split(".").pop();
       const path = `gallery/${Date.now()}.${ext}`;
-      const { error } = await supabase.storage.from("images").upload(path, file);
-      if (error) throw error;
+      const { error: uploadErr } = await supabase.storage.from("images").upload(path, file);
+      if (uploadErr) throw uploadErr;
       const { data: urlData } = supabase.storage.from("images").getPublicUrl(path);
-      addGalleryItem({ url: urlData.publicUrl, ...form });
+      const { error: dbErr } = await supabase.from("gallery_items").insert({
+        url: urlData.publicUrl,
+        caption_en: form.captionEn,
+        caption_mr: form.captionMr,
+        category: form.category,
+      });
+      if (dbErr) throw dbErr;
+      await fetchGallery();
       setForm({ captionEn: "", captionMr: "", category: "events" });
       setFile(null);
       setPreview(null);
@@ -158,18 +172,18 @@ function GalleryTab() {
     }
   };
 
-  const handleDelete = async (item: GalleryItem) => {
+  const handleDelete = async (item: { id: string; url: string }) => {
     try {
-      // Try to extract storage path from URL
-      const url = item.url;
-      const match = url.match(/images\/(.+)$/);
+      const match = item.url.match(/images\/(.+)$/);
       if (match) {
         await supabase.storage.from("images").remove([match[1]]);
       }
-      deleteGalleryItem(item.id);
+      const { error } = await supabase.from("gallery_items").delete().eq("id", item.id);
+      if (error) throw error;
+      await fetchGallery();
       toast({ title: "Image deleted." });
-    } catch {
-      deleteGalleryItem(item.id);
+    } catch (err: any) {
+      toast({ title: "Delete failed", description: err.message, variant: "destructive" });
     }
   };
 
@@ -204,9 +218,9 @@ function GalleryTab() {
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {data.gallery.map((g) => (
+        {galleryItems.map((g) => (
           <div key={g.id} className="relative group">
-            <img src={g.url} alt={g.captionEn} className="w-full aspect-square object-cover rounded-lg" loading="lazy" />
+            <img src={g.url} alt={g.caption_en} className="w-full aspect-square object-cover rounded-lg" loading="lazy" />
             <button
               onClick={() => handleDelete(g)}
               className="absolute top-2 right-2 p-1.5 rounded-full bg-destructive text-destructive-foreground opacity-0 group-hover:opacity-100 transition-opacity"
@@ -219,7 +233,6 @@ function GalleryTab() {
     </div>
   );
 }
-
 function AchievementsTab() {
   const { data, addAchievement, deleteAchievement } = useData();
   const { t } = useLanguage();
