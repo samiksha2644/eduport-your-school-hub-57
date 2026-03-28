@@ -184,6 +184,33 @@ export type Database = {
         }
         Relationships: []
       }
+      gallery_items: {
+        Row: {
+          caption_en: string
+          caption_mr: string
+          category: string
+          created_at: string
+          id: string
+          url: string
+        }
+        Insert: {
+          caption_en?: string
+          caption_mr?: string
+          category?: string
+          created_at?: string
+          id?: string
+          url: string
+        }
+        Update: {
+          caption_en?: string
+          caption_mr?: string
+          category?: string
+          created_at?: string
+          id?: string
+          url?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           id: string
