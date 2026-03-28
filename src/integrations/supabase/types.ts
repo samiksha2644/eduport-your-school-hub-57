@@ -30,6 +30,7 @@ export type Database = {
           sort_order: number
           subjects_en: string
           subjects_mr: string
+          video_url: string
         }
         Insert: {
           career_options_en?: string
@@ -46,6 +47,7 @@ export type Database = {
           sort_order?: number
           subjects_en?: string
           subjects_mr?: string
+          video_url?: string
         }
         Update: {
           career_options_en?: string
@@ -62,6 +64,7 @@ export type Database = {
           sort_order?: number
           subjects_en?: string
           subjects_mr?: string
+          video_url?: string
         }
         Relationships: []
       }
@@ -74,6 +77,7 @@ export type Database = {
           name_en: string
           name_mr: string
           sort_order: number
+          video_url: string
         }
         Insert: {
           created_at?: string
@@ -83,6 +87,7 @@ export type Database = {
           name_en: string
           name_mr?: string
           sort_order?: number
+          video_url?: string
         }
         Update: {
           created_at?: string
@@ -92,6 +97,7 @@ export type Database = {
           name_en?: string
           name_mr?: string
           sort_order?: number
+          video_url?: string
         }
         Relationships: []
       }
