@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
-import { Plus, Trash2, Save, Edit2, ChevronDown } from "lucide-react";
+import { Plus, Trash2, Save, Edit2, ChevronDown, Video } from "lucide-react";
 
 const inputClass = "w-full px-4 py-2 rounded-lg border bg-background text-foreground focus:ring-2 focus:ring-primary outline-none";
 const btnPrimary = "px-4 py-2 bg-primary text-primary-foreground font-medium rounded-lg hover:opacity-90 transition-opacity flex items-center gap-2 text-sm";
 const btnDanger = "p-2 rounded-lg text-destructive hover:bg-destructive/10 transition-colors";
+
+const isValidYouTubeUrl = (url: string) => {
+  if (!url) return true;
+  return /^(https?:\/\/)?(www\.)?(youtube\.com\/(watch\?v=|embed\/|shorts\/)|youtu\.be\/)[\w-]+/.test(url);
+};
 
 interface CareerStream {
   id: string;
@@ -21,6 +26,7 @@ interface CareerStream {
   future_scope_en: string;
   future_scope_mr: string;
   sort_order: number;
+  video_url: string;
 }
 
 interface EntranceExam {
@@ -30,6 +36,7 @@ interface EntranceExam {
   description_en: string;
   description_mr: string;
   sort_order: number;
+  video_url: string;
 }
 
 const CareerAdmin: React.FC = () => {
@@ -75,6 +82,9 @@ const CareerAdmin: React.FC = () => {
 
   const handleSaveStream = async () => {
     if (!editingStream) return;
+    if (editForm.video_url && !isValidYouTubeUrl(editForm.video_url)) {
+      toast({ title: "Invalid YouTube URL", variant: "destructive" }); return;
+    }
     const { id, created_at, ...rest } = editForm as any;
     const { error } = await supabase.from("career_streams").update(rest).eq("id", editingStream);
     if (error) toast({ title: "Error", description: error.message, variant: "destructive" });
@@ -100,11 +110,15 @@ const CareerAdmin: React.FC = () => {
 
   const handleSaveExam = async () => {
     if (!editingExam) return;
+    if (examForm.video_url && !isValidYouTubeUrl(examForm.video_url)) {
+      toast({ title: "Invalid YouTube URL", variant: "destructive" }); return;
+    }
     const { error } = await supabase.from("entrance_exams").update({
       name_en: examForm.name_en,
       name_mr: examForm.name_mr,
       description_en: examForm.description_en,
       description_mr: examForm.description_mr,
+      video_url: examForm.video_url || "",
     }).eq("id", editingExam);
     if (error) toast({ title: "Error", description: error.message, variant: "destructive" });
     else { toast({ title: "Exam updated!" }); setEditingExam(null); fetchAll(); }
@@ -147,6 +161,13 @@ const CareerAdmin: React.FC = () => {
                     </div>
                   </div>
                 ))}
+                <div>
+                  <label className="text-xs font-medium text-muted-foreground flex items-center gap-1"><Video className="w-3 h-3" /> YouTube Video Link</label>
+                  <input className={inputClass} placeholder="https://youtube.com/watch?v=..." value={editForm.video_url || ""} onChange={(e) => setEditForm({ ...editForm, video_url: e.target.value })} />
+                  {editForm.video_url && !isValidYouTubeUrl(editForm.video_url) && (
+                    <p className="text-xs text-destructive mt-1">Invalid YouTube URL</p>
+                  )}
+                </div>
                 <button onClick={handleSaveStream} className={btnPrimary}><Save className="w-4 h-4" /> Save</button>
               </div>
             )}
@@ -225,6 +246,13 @@ const CareerAdmin: React.FC = () => {
                     <div className="grid md:grid-cols-2 gap-2">
                       <textarea className={inputClass} rows={4} placeholder="Description (EN)" value={examForm.description_en || ""} onChange={(e) => setExamForm({ ...examForm, description_en: e.target.value })} />
                       <textarea className={inputClass} rows={4} placeholder="वर्णन (MR)" value={examForm.description_mr || ""} onChange={(e) => setExamForm({ ...examForm, description_mr: e.target.value })} />
+                    </div>
+                    <div>
+                      <label className="text-xs font-medium text-muted-foreground flex items-center gap-1"><Video className="w-3 h-3" /> YouTube Video Link</label>
+                      <input className={inputClass} placeholder="https://youtube.com/watch?v=..." value={examForm.video_url || ""} onChange={(e) => setExamForm({ ...examForm, video_url: e.target.value })} />
+                      {examForm.video_url && !isValidYouTubeUrl(examForm.video_url) && (
+                        <p className="text-xs text-destructive mt-1">Invalid YouTube URL</p>
+                      )}
                     </div>
                     <button onClick={handleSaveExam} className={btnPrimary}><Save className="w-4 h-4" /> Save</button>
                   </div>
