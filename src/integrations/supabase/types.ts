@@ -14,6 +14,66 @@ export type Database = {
   }
   public: {
     Tables: {
+      achievements: {
+        Row: {
+          created_at: string
+          desc_en: string
+          desc_mr: string
+          id: string
+          title_en: string
+          title_mr: string
+        }
+        Insert: {
+          created_at?: string
+          desc_en?: string
+          desc_mr?: string
+          id?: string
+          title_en?: string
+          title_mr?: string
+        }
+        Update: {
+          created_at?: string
+          desc_en?: string
+          desc_mr?: string
+          id?: string
+          title_en?: string
+          title_mr?: string
+        }
+        Relationships: []
+      }
+      announcements: {
+        Row: {
+          category: string
+          created_at: string
+          date: string
+          desc_en: string
+          desc_mr: string
+          id: string
+          title_en: string
+          title_mr: string
+        }
+        Insert: {
+          category?: string
+          created_at?: string
+          date?: string
+          desc_en?: string
+          desc_mr?: string
+          id?: string
+          title_en?: string
+          title_mr?: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          date?: string
+          desc_en?: string
+          desc_mr?: string
+          id?: string
+          title_en?: string
+          title_mr?: string
+        }
+        Relationships: []
+      }
       career_streams: {
         Row: {
           career_options_en: string
@@ -65,6 +125,36 @@ export type Database = {
           subjects_en?: string
           subjects_mr?: string
           video_url?: string
+        }
+        Relationships: []
+      }
+      contact_messages: {
+        Row: {
+          created_at: string
+          date: string
+          email: string
+          id: string
+          message: string
+          name: string
+          phone: string
+        }
+        Insert: {
+          created_at?: string
+          date?: string
+          email?: string
+          id?: string
+          message?: string
+          name?: string
+          phone?: string
+        }
+        Update: {
+          created_at?: string
+          date?: string
+          email?: string
+          id?: string
+          message?: string
+          name?: string
+          phone?: string
         }
         Relationships: []
       }
@@ -208,6 +298,63 @@ export type Database = {
           created_at?: string
           id?: string
           url?: string
+        }
+        Relationships: []
+      }
+      site_settings: {
+        Row: {
+          banner_image: string
+          id: string
+          mission_en: string
+          mission_mr: string
+          principal_message_en: string
+          principal_message_mr: string
+          school_address: string
+          school_email: string
+          school_phone: string
+          spotlight_en: string
+          spotlight_mr: string
+          updated_at: string
+          vision_en: string
+          vision_mr: string
+          visiting_hours_en: string
+          visiting_hours_mr: string
+        }
+        Insert: {
+          banner_image?: string
+          id?: string
+          mission_en?: string
+          mission_mr?: string
+          principal_message_en?: string
+          principal_message_mr?: string
+          school_address?: string
+          school_email?: string
+          school_phone?: string
+          spotlight_en?: string
+          spotlight_mr?: string
+          updated_at?: string
+          vision_en?: string
+          vision_mr?: string
+          visiting_hours_en?: string
+          visiting_hours_mr?: string
+        }
+        Update: {
+          banner_image?: string
+          id?: string
+          mission_en?: string
+          mission_mr?: string
+          principal_message_en?: string
+          principal_message_mr?: string
+          school_address?: string
+          school_email?: string
+          school_phone?: string
+          spotlight_en?: string
+          spotlight_mr?: string
+          updated_at?: string
+          vision_en?: string
+          vision_mr?: string
+          visiting_hours_en?: string
+          visiting_hours_mr?: string
         }
         Relationships: []
       }
