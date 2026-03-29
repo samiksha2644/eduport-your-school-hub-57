@@ -59,15 +59,15 @@ const Footer: React.FC = () => {
             <ul className="space-y-3 text-sm text-primary-foreground/70">
               <li className="flex items-center gap-2">
                 <Mail className="w-4 h-4 text-accent" />
-                {data.schoolEmail}
+                {data.settings.school_email}
               </li>
               <li className="flex items-center gap-2">
                 <Phone className="w-4 h-4 text-accent" />
-                {data.schoolPhone}
+                {data.settings.school_phone}
               </li>
               <li className="flex items-start gap-2">
                 <MapPin className="w-4 h-4 text-accent mt-0.5" />
-                {data.schoolAddress}
+                {data.settings.school_address}
               </li>
             </ul>
             <div className="mt-4">
