@@ -29,6 +29,7 @@ const AdminDashboard = () => {
     { key: "messages", icon: MessageSquare },
     { key: "examinations", icon: GraduationCap },
     { key: "career", icon: Compass },
+    { key: "contact_info", icon: MapPin },
   ];
 
   return (
