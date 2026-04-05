@@ -305,6 +305,7 @@ export type Database = {
         Row: {
           banner_image: string
           id: string
+          map_embed_url: string
           mission_en: string
           mission_mr: string
           principal_message_en: string
@@ -323,6 +324,7 @@ export type Database = {
         Insert: {
           banner_image?: string
           id?: string
+          map_embed_url?: string
           mission_en?: string
           mission_mr?: string
           principal_message_en?: string
@@ -341,6 +343,7 @@ export type Database = {
         Update: {
           banner_image?: string
           id?: string
+          map_embed_url?: string
           mission_en?: string
           mission_mr?: string
           principal_message_en?: string
