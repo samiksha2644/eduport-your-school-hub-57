@@ -287,6 +287,7 @@ export const translations = {
         spotlight: "स्पॉटलाइट",
         examinations: "परीक्षा",
         career: "करिअर मार्गदर्शन",
+        contact_info: "संपर्क माहिती",
       } as Record<string, string>,
       add: "जोडा",
       edit: "संपादन",
