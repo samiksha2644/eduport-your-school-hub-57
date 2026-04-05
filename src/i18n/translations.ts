@@ -132,6 +132,7 @@ export const translations = {
         spotlight: "Spotlight",
         examinations: "Examinations",
         career: "Career Guidance",
+        contact_info: "Contact Info",
       } as Record<string, string>,
       add: "Add",
       edit: "Edit",
