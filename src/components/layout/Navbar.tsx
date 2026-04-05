@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
-import { Menu, X, Globe, GraduationCap } from "lucide-react";
+import { Menu, X, Globe } from "lucide-react";
+import schoolLogo from "@/assets/school-logo.jpeg";
 
 const Navbar: React.FC = () => {
   const { lang, t, toggleLanguage } = useLanguage();
@@ -27,10 +28,8 @@ const Navbar: React.FC = () => {
     <nav className="sticky top-0 z-50 bg-card/95 backdrop-blur-md border-b shadow-sm">
       <div className="container mx-auto flex items-center justify-between h-16 px-4">
         <Link to="/" className="flex items-center gap-2">
-          <div className="w-9 h-9 rounded-lg bg-primary flex items-center justify-center">
-            <GraduationCap className="w-5 h-5 text-primary-foreground" />
-          </div>
-          <span className="font-heading font-bold text-xl text-foreground">EduPort</span>
+          <img src={schoolLogo} alt="School Logo" className="w-9 h-9 rounded-lg object-contain" />
+          <span className="font-heading font-bold text-xl text-foreground">कोयना एज्युकेशन</span>
         </Link>
 
         <div className="hidden lg:flex items-center gap-1">

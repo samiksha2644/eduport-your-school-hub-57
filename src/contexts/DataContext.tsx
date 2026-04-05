@@ -43,6 +43,7 @@ export interface SiteSettings {
   school_email: string;
   school_phone: string;
   school_address: string;
+  map_embed_url: string;
 }
 
 export interface SiteData {
@@ -60,6 +61,7 @@ const defaultSettings: SiteSettings = {
   school_email: "info@eduport.school",
   school_phone: "+91 12345 67890",
   school_address: "123 Education Lane, Knowledge City, Maharashtra 411001",
+  map_embed_url: "",
 };
 
 interface DataContextType {
@@ -119,7 +121,7 @@ export const DataProvider = ({ children }) => {
           principal_message_en: s.principal_message_en, principal_message_mr: s.principal_message_mr,
           visiting_hours_en: s.visiting_hours_en, visiting_hours_mr: s.visiting_hours_mr,
           banner_image: s.banner_image, spotlight_en: s.spotlight_en, spotlight_mr: s.spotlight_mr,
-          school_email: s.school_email, school_phone: s.school_phone, school_address: s.school_address,
+          school_email: s.school_email, school_phone: s.school_phone, school_address: s.school_address, map_embed_url: s.map_embed_url || "",
         },
       }));
     }
