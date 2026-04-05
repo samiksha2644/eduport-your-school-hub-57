@@ -61,6 +61,7 @@ const defaultSettings: SiteSettings = {
   school_email: "info@eduport.school",
   school_phone: "+91 12345 67890",
   school_address: "123 Education Lane, Knowledge City, Maharashtra 411001",
+  map_embed_url: "",
 };
 
 interface DataContextType {
