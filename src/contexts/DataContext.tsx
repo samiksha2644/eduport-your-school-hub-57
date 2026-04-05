@@ -43,6 +43,7 @@ export interface SiteSettings {
   school_email: string;
   school_phone: string;
   school_address: string;
+  map_embed_url: string;
 }
 
 export interface SiteData {
