@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
-import { Menu, X, Globe, GraduationCap } from "lucide-react";
+import { Menu, X, Globe } from "lucide-react";
+import schoolLogo from "@/assets/school-logo.jpeg";
 
 const Navbar: React.FC = () => {
   const { lang, t, toggleLanguage } = useLanguage();
