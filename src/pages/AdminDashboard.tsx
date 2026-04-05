@@ -459,4 +459,44 @@ function MessagesTab() {
   );
 }
 
+function ContactInfoTab() {
+  const { data, updateSettings } = useData();
+  const [email, setEmail] = useState(data.settings.school_email);
+  const [phone, setPhone] = useState(data.settings.school_phone);
+  const [address, setAddress] = useState(data.settings.school_address);
+  const [mapUrl, setMapUrl] = useState(data.settings.map_embed_url || "");
+
+  useEffect(() => {
+    setEmail(data.settings.school_email);
+    setPhone(data.settings.school_phone);
+    setAddress(data.settings.school_address);
+    setMapUrl(data.settings.map_embed_url || "");
+  }, [data.settings]);
+
+  const handleSave = async () => {
+    const ok = await updateSettings({ school_email: email, school_phone: phone, school_address: address, map_embed_url: mapUrl });
+    toast({ title: ok ? "Contact info saved!" : "Save failed", variant: ok ? "default" : "destructive" });
+  };
+
+  return (
+    <div className="space-y-4">
+      <h3 className="font-semibold">School Email</h3>
+      <input className={inputClass} value={email} onChange={(e) => setEmail(e.target.value)} placeholder="info@school.com" />
+      <h3 className="font-semibold">School Phone</h3>
+      <input className={inputClass} value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+91 12345 67890" />
+      <h3 className="font-semibold">School Address</h3>
+      <textarea className={inputClass} value={address} onChange={(e) => setAddress(e.target.value)} rows={2} />
+      <h3 className="font-semibold">Google Maps Embed URL</h3>
+      <p className="text-xs text-muted-foreground">Go to Google Maps → Share → Embed a map → Copy the src URL from the iframe code</p>
+      <input className={inputClass} value={mapUrl} onChange={(e) => setMapUrl(e.target.value)} placeholder="https://www.google.com/maps/embed?pb=..." />
+      {mapUrl && (
+        <div className="rounded-lg overflow-hidden border">
+          <iframe src={mapUrl} width="100%" height="200" style={{ border: 0 }} allowFullScreen loading="lazy" title="Map Preview" />
+        </div>
+      )}
+      <button onClick={handleSave} className={btnPrimary}><Save className="w-4 h-4" /> Save Contact Info</button>
+    </div>
+  );
+}
+
 export default AdminDashboard;
